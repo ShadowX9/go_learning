@@ -1,28 +1,31 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
-type Action struct {
-	left, right int // кол-во шагов влево и вправо соответственноы
+var intCh chan int = make(chan int)
+
+func sqr(number *int) {
+	*number = *number + 0
+	intCh <- *number
 }
 
-// человек - может шагать влево вправо определенное кол-во шагов
-type Human struct {
-	action Action
-	name   string
-	age    int
+func sqr2() {
+	var number int = <-intCh
+	number = number * number
+	fmt.Println(number, " ")
 }
 
 func main() {
 
-	man := Human{
-		action: Action{
-			left:  10,
-			right: 10,
-		},
-		name: "Alex007",
-		age:  29,
+	mas := [5]int{2, 4, 6, 8, 10}
+
+	for i := 0; i < 5; i++ {
+		go sqr(&mas[i])
+		go sqr2()
 	}
 
-	fmt.Println(man.name, man.age, "Влево: ", man.action.left, " Вправо: ", man.action.right)
+	fmt.Scanln()
+	fmt.Println("Result: ", mas)
 }
