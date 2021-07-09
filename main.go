@@ -14,18 +14,20 @@ func sqr(number *int) {
 func sqr2() {
 	var number int = <-intCh
 	number = number * number
-	fmt.Println(number, " ")
+	intCh <- number
 }
 
 func main() {
 
 	mas := [5]int{2, 4, 6, 8, 10}
+	sum := 0
 
 	for i := 0; i < 5; i++ {
 		go sqr(&mas[i])
 		go sqr2()
+		sum += <-intCh
 	}
 
 	fmt.Scanln()
-	fmt.Println("Result: ", mas)
+	fmt.Println("SUM: ", sum)
 }
